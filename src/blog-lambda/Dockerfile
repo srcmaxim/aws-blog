@@ -13,8 +13,8 @@ COPY --from=build /project/target/bootstrap-example.sh ${LAMBDA_RUNTIME_DIR}/boo
 # Copy function code
 COPY --from=build /project/target/*-runner ${LAMBDA_TASK_ROOT}/runner
 # Setup bootstrap and runner
-RUN chmod +x ${LAMBDA_RUNTIME_DIR}/bootstrap
-RUN chmod +x ${LAMBDA_TASK_ROOT}/runner
+RUN chmod 775 ${LAMBDA_RUNTIME_DIR}/bootstrap
+RUN chmod 775 ${LAMBDA_TASK_ROOT}/runner
 # Setup Env
 ENV DISABLE_SIGNAL_HANDLERS true
 
