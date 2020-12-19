@@ -9,6 +9,7 @@ import software.amazon.awscdk.services.codepipeline.actions.CodeBuildAction;
 import software.amazon.awscdk.services.codepipeline.actions.GitHubSourceAction;
 import software.amazon.awscdk.services.codepipeline.actions.GitHubTrigger;
 import software.amazon.awscdk.services.ecr.Repository;
+import software.amazon.awscdk.services.ssm.StringParameter;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ public class BlogPipelineStack extends Stack {
         var lambdaRepository = Repository.Builder.create(this, "BlogLambdaRepository")
                 .repositoryName("blog-lambda")
                 .build();
+
+        var lambdaImageVersion = StringParameter.fromStringParameterName(this, "LambdaImageVersion", "/dev/blog-lambda/ecr-image/version");
 
         var pipeline = Pipeline.Builder.create(this, "BlogPipeline")
                 .build();
@@ -62,6 +65,7 @@ public class BlogPipelineStack extends Stack {
                 .build();
 
         lambdaRepository.grantPullPush(lambdaBuildProject);
+        lambdaImageVersion.grantWrite(lambdaBuildProject);
 
         pipeline.addStage(StageOptions.builder()
                 .stageName("LambdaBuild")

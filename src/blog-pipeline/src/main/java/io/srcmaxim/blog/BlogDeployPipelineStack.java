@@ -14,6 +14,7 @@ import software.amazon.awscdk.services.codepipeline.actions.GitHubSourceAction;
 import software.amazon.awscdk.services.codepipeline.actions.GitHubTrigger;
 import software.amazon.awscdk.services.ecr.Repository;
 import software.amazon.awscdk.services.iam.PolicyStatement;
+import software.amazon.awscdk.services.ssm.StringParameter;
 
 import java.util.List;
 
@@ -31,6 +32,8 @@ public class BlogDeployPipelineStack extends Stack {
                 .pipelineName("BlogDeployPipeline")
                 .build();
 
+        var imageTag = StringParameter.valueForStringParameter(this, "/dev/blog-lambda/ecr-image/version");
+
         pipeline.addStage(StageOptions.builder()
                 .stageName("Source")
                 .actions(List.of(
@@ -38,6 +41,7 @@ public class BlogDeployPipelineStack extends Stack {
                                 .actionName("RepositoryLambdaSource")
                                 .output(lambdaSourceOutput)
                                 .repository(lambdaRepository)
+                                .imageTag(imageTag)
                                 .build(),
                         GitHubSourceAction.Builder.create()
                                 .actionName("GitHubCdkSource")
