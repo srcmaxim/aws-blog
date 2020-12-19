@@ -1,0 +1,8 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - npm install -g aws-cdk
+  build:
+    commands:
+      - cdk synth --all --ci --require-approval never

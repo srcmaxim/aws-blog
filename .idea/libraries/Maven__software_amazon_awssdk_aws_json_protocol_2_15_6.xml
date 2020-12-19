@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: software.amazon.awssdk:aws-json-protocol:2.15.6">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/software/amazon/awssdk/aws-json-protocol/2.15.6/aws-json-protocol-2.15.6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/software/amazon/awssdk/aws-json-protocol/2.15.6/aws-json-protocol-2.15.6-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/software/amazon/awssdk/aws-json-protocol/2.15.6/aws-json-protocol-2.15.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
