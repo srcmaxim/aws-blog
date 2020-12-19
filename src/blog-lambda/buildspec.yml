@@ -11,13 +11,15 @@ phases:
       - echo Setup Env...
       - export IMAGE_REPO_NAME=blog-lambda
       - export IMAGE_TAG=$CODEBUILD_BUILD_NUMBER
+      - export REPO=/src/blog-lambda
       - echo Setup Meta...
-      - echo meta.build-number=$CODEBUILD_BUILD_NUMBER >> src/main/resources/application.properties
-      - echo meta.source-version=$CODEBUILD_SOURCE_VERSION >> src/main/resources/application.properties
+      - echo meta.build-number=$CODEBUILD_BUILD_NUMBER >> $REPO/src/main/resources/application.properties
+      - echo meta.source-version=$CODEBUILD_SOURCE_VERSION >> $REPO/src/main/resources/application.properties
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
+      - cd $REPO
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
   post_build:
