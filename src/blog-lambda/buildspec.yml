@@ -9,14 +9,11 @@ phases:
       - echo Logging in to DockerHub...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - echo Setup Env...
+      - export REPO=$(pwd)/src/blog-lambda
       - export IMAGE_REPO_NAME=blog-lambda
       - export IMAGE_TAG=$CODEBUILD_BUILD_NUMBER
-      - export REPO=$(pwd)/src/blog-lambda
-      - echo Check files...
-      - cd $REPO
-      - echo "Directory:" $(pwd)
-      - echo "Files:" $(ls -a)
       - echo Setup Meta...
+      - cd $REPO
       - echo meta.build-number=$CODEBUILD_BUILD_NUMBER >> src/main/resources/application.properties
       - echo meta.source-version=$CODEBUILD_SOURCE_VERSION >> src/main/resources/application.properties
   build:
