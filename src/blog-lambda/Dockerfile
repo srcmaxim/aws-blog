@@ -12,7 +12,10 @@ FROM public.ecr.aws/lambda/provided:al2 AS runtime
 COPY --from=build /project/target/bootstrap-example.sh ${LAMBDA_RUNTIME_DIR}/bootstrap
 # Copy function code
 COPY --from=build /project/target/*-runner ${LAMBDA_TASK_ROOT}/runner
-
+# Setup bootstrap and runner
+RUN chmod +x ${LAMBDA_RUNTIME_DIR}/bootstrap
+RUN chmod +x ${LAMBDA_TASK_ROOT}/runner
+# Setup Env
 ENV DISABLE_SIGNAL_HANDLERS true
 
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
