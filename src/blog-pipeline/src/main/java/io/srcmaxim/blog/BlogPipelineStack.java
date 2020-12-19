@@ -1,16 +1,7 @@
 package io.srcmaxim.blog;
 
-import software.amazon.awscdk.core.Construct;
-import software.amazon.awscdk.core.SecretValue;
-import software.amazon.awscdk.core.Stack;
-import software.amazon.awscdk.core.StackProps;
-import software.amazon.awscdk.services.codebuild.BuildEnvironment;
-import software.amazon.awscdk.services.codebuild.BuildSpec;
-import software.amazon.awscdk.services.codebuild.Cache;
-import software.amazon.awscdk.services.codebuild.ComputeType;
-import software.amazon.awscdk.services.codebuild.LinuxBuildImage;
-import software.amazon.awscdk.services.codebuild.LocalCacheMode;
-import software.amazon.awscdk.services.codebuild.PipelineProject;
+import software.amazon.awscdk.core.*;
+import software.amazon.awscdk.services.codebuild.*;
 import software.amazon.awscdk.services.codepipeline.Artifact;
 import software.amazon.awscdk.services.codepipeline.Pipeline;
 import software.amazon.awscdk.services.codepipeline.StageOptions;
@@ -20,6 +11,7 @@ import software.amazon.awscdk.services.codepipeline.actions.GitHubTrigger;
 import software.amazon.awscdk.services.ecr.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 public class BlogPipelineStack extends Stack {
 
@@ -54,6 +46,16 @@ public class BlogPipelineStack extends Stack {
                         .buildImage(LinuxBuildImage.STANDARD_4_0)
                         .computeType(ComputeType.MEDIUM)
                         .privileged(true)
+                        .environmentVariables(Map.of(
+                                "AWS_ACCOUNT_ID", BuildEnvironmentVariable.builder()
+                                        .type(BuildEnvironmentVariableType.PLAINTEXT)
+                                        .value(this.getAccount())
+                                        .build(),
+                                "AWS_DEFAULT_REGION", BuildEnvironmentVariable.builder()
+                                        .type(BuildEnvironmentVariableType.PLAINTEXT)
+                                        .value(this.getRegion())
+                                        .build()
+                        ))
                         .build())
                 .buildSpec(BuildSpec.fromSourceFilename("src/blog-lambda/buildspec.yml"))
                 .cache(Cache.local(LocalCacheMode.DOCKER_LAYER))
