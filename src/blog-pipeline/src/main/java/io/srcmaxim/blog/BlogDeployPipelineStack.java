@@ -32,7 +32,7 @@ public class BlogDeployPipelineStack extends Stack {
                 .pipelineName("BlogDeployPipeline")
                 .build();
 
-        var imageTag = StringParameter.valueForStringParameter(this, "/dev/blog-lambda/ecr-image/version");
+        var lambdaImageVersion = StringParameter.valueForStringParameter(this, "/dev/blog-lambda/ecr-image/version");
 
         pipeline.addStage(StageOptions.builder()
                 .stageName("Source")
@@ -41,7 +41,7 @@ public class BlogDeployPipelineStack extends Stack {
                                 .actionName("RepositoryLambdaSource")
                                 .output(lambdaSourceOutput)
                                 .repository(lambdaRepository)
-                                .imageTag(imageTag)
+                                .imageTag(lambdaImageVersion)
                                 .build(),
                         GitHubSourceAction.Builder.create()
                                 .actionName("GitHubCdkSource")
