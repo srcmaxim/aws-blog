@@ -76,7 +76,7 @@
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
-            <artifactId>aws-ssm</artifactId>
+            <artifactId>ssm</artifactId>
             <version>${cdk.version}</version>
         </dependency>
 
