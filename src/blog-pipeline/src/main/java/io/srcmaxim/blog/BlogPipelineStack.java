@@ -25,7 +25,9 @@ public class BlogPipelineStack extends Stack {
                 .repositoryName("blog-lambda")
                 .build();
 
-        var lambdaImageVersion = StringParameter.fromStringParameterName(this, "LambdaImageVersion", "/dev/blog-lambda/ecr-image/version");
+        var lambdaImageVersion = StringParameter.Builder.create(this, "LambdaImageVersion")
+                .parameterName("/dev/blog-lambda/ecr-image/version")
+                .build();
 
         var pipeline = Pipeline.Builder.create(this, "BlogPipeline")
                 .build();
