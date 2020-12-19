@@ -18,21 +18,23 @@ public class BlogPipelineStack extends Stack {
     public BlogPipelineStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
-        var lambdaSourceOutput = Artifact.artifact("LAMBDA_SOURCE");
+        var sourceOutput = Artifact.artifact("SOURCE");
+        var cdkBuildOutput = Artifact.artifact("CDK_BUILD");
 
         var lambdaRepository = Repository.Builder.create(this, "BlogLambdaRepository")
                 .repositoryName("blog-lambda")
                 .build();
 
         var pipeline = Pipeline.Builder.create(this, "BlogPipeline")
+                .pipelineName("BlogPipeline")
                 .build();
 
         pipeline.addStage(StageOptions.builder()
                 .stageName("Source")
                 .actions(List.of(
                         GitHubSourceAction.Builder.create()
-                                .actionName("GitHubLambdaSource")
-                                .output(lambdaSourceOutput)
+                                .actionName("GitHubSource")
+                                .output(sourceOutput)
                                 .oauthToken(SecretValue.secretsManager("GITHUB_TOKEN"))
                                 .owner("srcmaxim")
                                 .repo("aws-blog")
@@ -63,13 +65,27 @@ public class BlogPipelineStack extends Stack {
 
         lambdaRepository.grantPullPush(lambdaBuildProject);
 
+        var cdkBuildProject = PipelineProject.Builder.create(this, "CdkBuildProject")
+                .environment(BuildEnvironment.builder()
+                        .buildImage(LinuxBuildImage.STANDARD_4_0)
+                        .computeType(ComputeType.SMALL)
+                        .build())
+                .buildSpec(BuildSpec.fromSourceFilename("src/blog-pipeline/buildspec.yml"))
+                .build();
+
         pipeline.addStage(StageOptions.builder()
                 .stageName("LambdaBuild")
                 .actions(List.of(
                         CodeBuildAction.Builder.create()
                                 .actionName("LambdaBuild")
                                 .project(lambdaBuildProject)
-                                .input(lambdaSourceOutput)
+                                .input(sourceOutput)
+                                .build(),
+                        CodeBuildAction.Builder.create()
+                                .actionName("CdkBuild")
+                                .project(cdkBuildProject)
+                                .input(sourceOutput)
+                                .outputs(List.of(cdkBuildOutput))
                                 .build()
                 )).build());
     }

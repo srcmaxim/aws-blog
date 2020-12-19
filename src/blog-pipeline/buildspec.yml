@@ -1,8 +1,18 @@
 version: 0.2
 phases:
+  pre_build:
+    commands:
+      - echo Setup Env...
+      - export REPO=$(pwd)/src/blog-pipeline
   install:
     commands:
       - npm install -g aws-cdk
   build:
     commands:
-      - cdk synth --all --ci --require-approval never
+      - echo Build started on `date`
+      - echo Building the CDK...
+      - cd $REPO
+      - cdk deploy --all --ci --require-approval never
+  post_build:
+    commands:
+      - echo Build completed on `date`
