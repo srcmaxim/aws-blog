@@ -8,6 +8,7 @@ public class BlogApp extends App {
 
         var blogPipelineStack = new BlogPipelineStack(this, "BlogPipelineStack", null);
         var blogDeployPipelineStack = new BlogDeployPipelineStack(this, "BlogDeployPipelineStack", null);
+        var blogApiStack = new BlogApiStack(this, "BlogApiStack", null);
 
     }
 
