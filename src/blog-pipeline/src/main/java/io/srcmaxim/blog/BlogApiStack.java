@@ -58,12 +58,9 @@ public class BlogApiStack extends Stack {
                 .memorySize(128)
                 .build();
 
-        var description = Fn.join("", List.of("Image version: ", lambdaImageVersion.getStringValue()));
-
         var alias = Alias.Builder.create(this, "BlogAlias")
                 .aliasName("Latest")
                 .version(function.getLatestVersion())
-                .description(description)
                 .build();
 
         var lambdaProxyIntegration = LambdaProxyIntegration.Builder.create()
