@@ -13,10 +13,7 @@ import software.amazon.awscdk.services.codedeploy.LambdaDeploymentConfig;
 import software.amazon.awscdk.services.codedeploy.LambdaDeploymentGroup;
 import software.amazon.awscdk.services.dynamodb.*;
 import software.amazon.awscdk.services.ecr.Repository;
-import software.amazon.awscdk.services.lambda.Alias;
-import software.amazon.awscdk.services.lambda.DockerImageCode;
-import software.amazon.awscdk.services.lambda.DockerImageFunction;
-import software.amazon.awscdk.services.lambda.EcrImageCodeProps;
+import software.amazon.awscdk.services.lambda.*;
 import software.amazon.awscdk.services.ssm.StringParameter;
 import software.amazon.awscdk.services.ssm.StringParameterAttributes;
 
@@ -62,9 +59,13 @@ public class BlogApiStack extends Stack {
                 .memorySize(128)
                 .build();
 
+        Version functionVersion = Version.Builder.create(this, "BlogFunctionVersion")
+                .lambda(function)
+                .build();
+
         var alias = Alias.Builder.create(this, "BlogAlias")
                 .aliasName("Latest")
-                .version(function.getCurrentVersion())
+                .version(functionVersion)
                 .build();
 
         var lambdaProxyIntegration = LambdaProxyIntegration.Builder.create()
