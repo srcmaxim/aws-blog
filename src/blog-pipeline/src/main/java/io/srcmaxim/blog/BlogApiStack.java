@@ -59,8 +59,11 @@ public class BlogApiStack extends Stack {
                 .memorySize(128)
                 .build();
 
+        var description = Fn.join("", List.of("Image version: ", lambdaImageVersion.getStringValue()));
+
         var functionVersion = Version.Builder.create(this, "BlogFunctionVersion")
                 .lambda(function)
+                .description(description)
                 .build();
 
         var alias = Alias.Builder.create(this, "BlogAlias")
