@@ -50,7 +50,6 @@ public class BlogApiStack extends Stack {
                 .stageName("prod")
                 .build();
 
-
         var function = DockerImageFunction.Builder.create(this, "BlogFunction")
                 .code(DockerImageCode.fromEcr(lambdaRepository, EcrImageCodeProps.builder()
                         .tag(lambdaImageVersion.getStringValue())
@@ -61,14 +60,10 @@ public class BlogApiStack extends Stack {
 
         var description = Fn.join("", List.of("Image version: ", lambdaImageVersion.getStringValue()));
 
-        var functionVersion = Version.Builder.create(this, "BlogFunctionVersion")
-                .lambda(function)
-                .description(description)
-                .build();
-
         var alias = Alias.Builder.create(this, "BlogAlias")
                 .aliasName("Latest")
-                .version(functionVersion)
+                .version(function.getLatestVersion())
+                .description(description)
                 .build();
 
         var lambdaProxyIntegration = LambdaProxyIntegration.Builder.create()
