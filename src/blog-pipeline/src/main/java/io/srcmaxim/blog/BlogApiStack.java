@@ -58,14 +58,9 @@ public class BlogApiStack extends Stack {
                 .memorySize(128)
                 .build();
 
-        var functionVersion = Version.Builder.create(this, "BlogFunctionVersion")
-                .removalPolicy(RemovalPolicy.RETAIN)
-                .lambda(function)
-                .build();
-
         var alias = Alias.Builder.create(this, "BlogAlias")
                 .aliasName("Latest")
-                .version(functionVersion)
+                .version(function.getCurrentVersion())
                 .build();
 
         var lambdaProxyIntegration = LambdaProxyIntegration.Builder.create()
