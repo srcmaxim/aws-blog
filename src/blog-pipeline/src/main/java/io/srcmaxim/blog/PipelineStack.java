@@ -38,7 +38,7 @@ public class PipelineStack extends Stack {
                                 .build())
                         .sourceArtifact(sourceArtifact)
                         .cloudAssemblyArtifact(cloudAssemblyArtifact)
-                        .subdirectory("blog-pipeline")
+                        .subdirectory("src/blog-pipeline")
                         .synthCommand("npx cdk synth")
                         .build())
                 .build());
