@@ -131,8 +131,10 @@ public class BlogApiStack extends Stack {
 
         var removalPolicy = RemovalPolicy.DESTROY;
 
+        var dynamoDBTableNameId = dynamoDBTableName + "Table";
+
         var table = Table.Builder
-                .create(this, "BlogTable")
+                .create(this, dynamoDBTableNameId)
                 .tableName(dynamoDBTableName)
                 .removalPolicy(removalPolicy)
                 .partitionKey(pk)
