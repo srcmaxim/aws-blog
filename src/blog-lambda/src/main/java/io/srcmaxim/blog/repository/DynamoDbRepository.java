@@ -1,13 +1,11 @@
 package io.srcmaxim.blog.repository;
 
+import io.srcmaxim.blog.config.DynamoDbConfig;
 import io.srcmaxim.blog.mapper.FromDynamoDbMapper;
 import io.srcmaxim.blog.mapper.ToDynamoDbMapper;
 import io.srcmaxim.blog.model.Post;
 import io.srcmaxim.blog.model.PostMeta;
-import io.srcmaxim.blog.model.dynamodb.DynamoDbMessage;
-import io.srcmaxim.blog.model.dynamodb.DynamoDbPost;
-import io.srcmaxim.blog.model.dynamodb.DynamoDbPostMeta;
-import io.srcmaxim.blog.model.dynamodb.DynamoDbTag;
+import io.srcmaxim.blog.model.dynamodb.*;
 import io.srcmaxim.blog.parser.DynamoDbParser;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -36,6 +34,8 @@ public class DynamoDbRepository extends AbstractDynamoDbRepository {
     DynamoDbParser dynamoDbParser;
     @Inject
     DynamoDbClient dynamoDB;
+    @Inject
+    DynamoDbConfig dynamoDbConfig;
 
     public void putPost(Post post) {
         putDynamoDbPost(toDynamoDbMapper.toDynamoDbBlog(post));
@@ -131,6 +131,11 @@ public class DynamoDbRepository extends AbstractDynamoDbRepository {
             handleCommonErrors(e);
             throw new RuntimeException("dynamodb_exception");
         }
+    }
+
+    @Override
+    protected String getTableName() {
+        return dynamoDbConfig.tableName;
     }
 
 }

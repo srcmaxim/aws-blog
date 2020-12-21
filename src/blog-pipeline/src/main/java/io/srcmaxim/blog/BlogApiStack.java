@@ -50,10 +50,15 @@ public class BlogApiStack extends Stack {
                 .stageName("prod")
                 .build();
 
+        var dynamoDBTableName = "Blog";
+
         var function = DockerImageFunction.Builder.create(this, "BlogFunction")
                 .code(DockerImageCode.fromEcr(lambdaRepository, EcrImageCodeProps.builder()
                         .tag(lambdaImageVersion.getStringValue())
                         .build()))
+                .environment(Map.of(
+                        "DYNAMODB_TABLE_NAME", dynamoDBTableName
+                ))
                 .timeout(Duration.seconds(15))
                 .memorySize(128)
                 .build();
@@ -128,7 +133,7 @@ public class BlogApiStack extends Stack {
 
         var table = Table.Builder
                 .create(this, "BlogTable")
-                .tableName("Blog")
+                .tableName(dynamoDBTableName)
                 .removalPolicy(removalPolicy)
                 .partitionKey(pk)
                 .sortKey(sk)

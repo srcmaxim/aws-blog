@@ -17,18 +17,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-class AbstractDynamoDbRepository {
+abstract class AbstractDynamoDbRepository {
 
     protected PutItemRequest putRequest(Supplier<Map<String, AttributeValue>> item) {
         return PutItemRequest.builder()
-                .tableName(DynamoDb.Blog.TABLE_NAME)
+                .tableName(getTableName())
                 .item(item.get())
                 .build();
     }
 
     protected QueryRequest queryRequest(String id) {
         return QueryRequest.builder()
-                .tableName(DynamoDb.Blog.TABLE_NAME)
+                .tableName(getTableName())
                 .keyConditionExpression("PK = :pk")
                 .consistentRead(false)
                 .scanIndexForward(true)
@@ -46,7 +46,7 @@ class AbstractDynamoDbRepository {
 
     protected QueryRequest queryByTagRequest(String tag) {
         return QueryRequest.builder()
-                .tableName(DynamoDb.Blog.TABLE_NAME)
+                .tableName(getTableName())
                 .indexName(DynamoDb.BlogGSI1.GSI1_NAME)
                 .keyConditionExpression("GSI1PK = :pk")
                 .consistentRead(false)
@@ -72,13 +72,15 @@ class AbstractDynamoDbRepository {
 
     private DeleteItemRequest deleteRequest(String pk, String sk) {
         return DeleteItemRequest.builder()
-                .tableName(DynamoDb.Blog.TABLE_NAME)
+                .tableName(getTableName())
                 .key(Map.of(
                         DynamoDb.Blog.PK, AttributeValue.builder().s(pk).build(),
                         DynamoDb.Blog.SK, AttributeValue.builder().s(sk).build()
                 ))
                 .build();
     }
+
+    protected abstract String getTableName();
 
     protected static void handleCommonErrors(Exception exception) {
         try {

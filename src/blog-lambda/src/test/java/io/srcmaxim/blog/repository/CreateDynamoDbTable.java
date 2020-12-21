@@ -1,5 +1,6 @@
 package io.srcmaxim.blog.repository;
 
+import io.srcmaxim.blog.config.DynamoDbConfig;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
@@ -26,6 +27,8 @@ public class CreateDynamoDbTable {
 
     @Inject
     DynamoDbClient dynamoDb;
+    @Inject
+    DynamoDbConfig dynamoDbConfig;
 
     @ConfigProperty(name = "quarkus.dynamodb.endpoint-override")
     String dynamoDbEndpointUrl;
@@ -55,7 +58,7 @@ public class CreateDynamoDbTable {
         KeySchemaElement skKey = KeySchemaElement.builder().attributeName("SK").keyType(KeyType.RANGE).build();
         ProvisionedThroughput provisionedThroughput = ProvisionedThroughput.builder().readCapacityUnits(1L).writeCapacityUnits(1L).build();
         return CreateTableRequest.builder()
-                .tableName("Blog")
+                .tableName(dynamoDbConfig.tableName)
                 .attributeDefinitions(pk, sk, gsi1Pk, gsi1Sk)
                 .keySchema(pkKey, skKey)
                 .provisionedThroughput(provisionedThroughput)

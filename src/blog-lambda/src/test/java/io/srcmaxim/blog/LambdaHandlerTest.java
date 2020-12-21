@@ -29,6 +29,10 @@ import java.util.stream.Stream;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Use Bash/PowerShell to start DynamoDB Local:
+ * docker run --publish 8000:8000 amazon/dynamodb-local:1.11.477 -jar DynamoDBLocal.jar -inMemory -sharedDb
+ */
 @QuarkusTest
 @QuarkusTestResource(DynamoDbLocalResource.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
