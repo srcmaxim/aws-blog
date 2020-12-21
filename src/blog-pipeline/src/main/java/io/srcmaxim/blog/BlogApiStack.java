@@ -151,8 +151,9 @@ public class BlogApiStack extends Stack {
         table.grantReadWriteData(function);
 
         //----- CloudFormation Outputs -----//
-        CfnOutput.Builder.create(this, "BlogHttpGatewayUrl")
-                .exportName("BlogHttpGatewayUrl")
+        String httpApiUrlId = getStackName() + "-HttpApiUrl";
+        CfnOutput.Builder.create(this, httpApiUrlId)
+                .exportName(httpApiUrlId)
                 .value(httpApi.getUrl())
                 .build();
     }
