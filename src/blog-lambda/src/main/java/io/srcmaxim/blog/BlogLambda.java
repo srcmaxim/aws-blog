@@ -5,11 +5,11 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.srcmaxim.blog.config.MetaConfig;
 import io.srcmaxim.blog.model.Post;
 import io.srcmaxim.blog.model.PostMeta;
 import io.srcmaxim.blog.service.BlogService;
 import io.srcmaxim.blog.service.HealthService;
+import io.srcmaxim.blog.service.MetaService;
 import io.srcmaxim.blog.service.ResponseService;
 import org.jboss.logging.Logger;
 
@@ -37,7 +37,7 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
     HealthService healthService;
 
     @Inject
-    MetaConfig metaConfig;
+    MetaService metaService;
 
     @Override
     public APIGatewayV2HTTPResponse handleRequest(APIGatewayV2HTTPEvent req, Context context) {
@@ -61,7 +61,7 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
                 }
             }
             case "GET /meta": {
-                return responseService.ok(metaConfig.getMeta());
+                return responseService.ok(metaService.getMeta());
             }
             case "GET /error": {
                 throw new RuntimeException("Error simulation");

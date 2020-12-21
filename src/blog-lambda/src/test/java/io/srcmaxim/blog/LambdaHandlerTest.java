@@ -192,7 +192,11 @@ class LambdaHandlerTest {
         String body = out.getBody();
         assertThat(body).isNotNull();
         assertThatJson(body)
-                .isEqualTo(toJson(Map.of("buildNumber", "BUILD_NUMBER", "sourceVersion", "SOURCE_VERSION")));
+                .isEqualTo(toJson(Map.of(
+                        "buildNumber", "BUILD_NUMBER",
+                        "sourceVersion", "SOURCE_VERSION",
+                        "tableName", "Blog"
+                )));
         assertThat(out.getStatusCode()).isEqualTo(200);
     }
 

@@ -15,11 +15,7 @@ class MetaConfigTest {
     MetaConfig metaConfig;
 
     @Test
-    void getMeta_WhenConfigSet_ThenReturnValues() {
-        assertThat(metaConfig.getMeta()).isEqualTo(Map.of(
-                "buildNumber", "BUILD_NUMBER",
-                "sourceVersion", "SOURCE_VERSION"
-        ));
+    void fields_WhenConfigSet_ThenReturnValues() {
         assertThat(metaConfig.buildNumber).isEqualTo("BUILD_NUMBER");
         assertThat(metaConfig.sourceVersion).isEqualTo("SOURCE_VERSION");
     }

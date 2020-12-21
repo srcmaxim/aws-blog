@@ -14,7 +14,7 @@ class DynamoDbConfigTest {
     DynamoDbConfig dynamoDbConfig;
 
     @Test
-    void tableName_WhenConfigSet_ThenReturnValues() {
+    void fields_WhenConfigSet_ThenReturnValues() {
         assertThat(dynamoDbConfig.tableName).isEqualTo("Blog");
     }
 

@@ -1,6 +1,6 @@
 package io.srcmaxim.blog.service;
 
-import io.srcmaxim.blog.model.dynamodb.DynamoDb;
+import io.srcmaxim.blog.config.DynamoDbConfig;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.DescribeTableRequest;
 
@@ -15,9 +15,12 @@ public class HealthService {
     @Inject
     DynamoDbClient dynamoDB;
 
+    @Inject
+    DynamoDbConfig dynamoDbConfig;
+
     public Map<String, Object> getHealth() {
         try {
-            dynamoDB.describeTable(describeTableRequest(DynamoDb.Blog.TABLE_NAME));
+            dynamoDB.describeTable(describeTableRequest(dynamoDbConfig.tableName));
             return Map.of(
                     "status", 200,
                     "data", Map.of(
