@@ -50,7 +50,7 @@ public class BlogApiStack extends Stack {
                 .stageName("prod")
                 .build();
 
-        var dynamoDBTableName = "Blog";
+        var dynamoDBTableName = id + "Blog";
 
         var function = DockerImageFunction.Builder.create(this, "BlogFunction")
                 .code(DockerImageCode.fromEcr(lambdaRepository, EcrImageCodeProps.builder()
