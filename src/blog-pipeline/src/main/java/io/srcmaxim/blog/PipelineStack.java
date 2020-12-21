@@ -51,7 +51,6 @@ public class PipelineStack extends Stack {
         BlogStage(Construct scope, String id, StageProps props) {
             super(scope, id, props);
 
-            new PipelineStack(this, "BlogPipelineStack", null);
             new BlogApiStack(this, "BlogApiStackV2", null);
 
         }
