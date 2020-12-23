@@ -23,6 +23,7 @@ public class BlogPipelineStack extends Stack {
 
         var lambdaRepository = Repository.Builder.create(this, "BlogLambdaRepository")
                 .repositoryName("blog-lambda")
+                .removalPolicy(RemovalPolicy.DESTROY)
                 .build();
 
         var lambdaImageVersion = StringParameter.fromStringParameterName(this, "LambdaImageVersion", "/dev/blog-lambda/ecr-image/version");

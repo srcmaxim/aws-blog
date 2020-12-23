@@ -19,7 +19,7 @@ public class PipelineStack extends Stack {
         var sourceArtifact = new Artifact();
         var cloudAssemblyArtifact = new Artifact();
 
-        var pipeline = new CdkPipeline(this, "BlogDeployPipelinev2", CdkPipelineProps.builder()
+        var pipeline = new CdkPipeline(this, "BlogDeployPipeline", CdkPipelineProps.builder()
                 .cloudAssemblyArtifact(cloudAssemblyArtifact)
                 .sourceAction(
                         GitHubSourceAction.Builder.create()
@@ -51,7 +51,9 @@ public class PipelineStack extends Stack {
         BlogStage(Construct scope, String id, StageProps props) {
             super(scope, id, props);
 
-            new BlogApiStack(this, "BlogApiStackV2", null);
+            var blogPipelineStack = new BlogPipelineStack(this, "BlogPipelineStack", null);
+            var blogApiStack = new BlogApiStack(this, "BlogApiStack", null);
+            blogApiStack.addDependency(blogPipelineStack);
 
         }
 
