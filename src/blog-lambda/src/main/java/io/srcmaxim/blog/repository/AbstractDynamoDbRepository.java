@@ -39,7 +39,7 @@ abstract class AbstractDynamoDbRepository {
 
     protected ScanRequest scanRequest() {
         return ScanRequest.builder()
-                .tableName("Blog")
+                .tableName(getTableName())
                 .consistentRead(false)
                 .build();
     }

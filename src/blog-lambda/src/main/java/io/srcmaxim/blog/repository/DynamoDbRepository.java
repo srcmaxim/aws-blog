@@ -28,12 +28,16 @@ public class DynamoDbRepository extends AbstractDynamoDbRepository {
 
     @Inject
     ToDynamoDbMapper toDynamoDbMapper;
+
     @Inject
     FromDynamoDbMapper fromDynamoDbMapper;
+
     @Inject
     DynamoDbParser dynamoDbParser;
+
     @Inject
     DynamoDbClient dynamoDB;
+
     @Inject
     DynamoDbConfig dynamoDbConfig;
 
@@ -91,15 +95,9 @@ public class DynamoDbRepository extends AbstractDynamoDbRepository {
 
     public List<Post> getPosts() {
         try {
-            dynamoDB.scan(ScanRequest.builder()
-                    .tableName("Blog")
-                    .consistentRead(false)
-                    .build());
-            ScanRequest scanRequest = scanRequest();
-            ScanResponse scanResponse = dynamoDB.scan(scanRequest);
+            ScanResponse scanResponse = dynamoDB.scan(scanRequest());
             List<Map<String, AttributeValue>> items = scanResponse.items();
-            List<Post> posts = dynamoDbParser.parsePosts(items);
-            return posts;
+            return dynamoDbParser.parsePosts(items);
         } catch (Exception e) {
             handleCommonErrors(e);
             throw new RuntimeException("dynamodb_exception");
@@ -110,11 +108,10 @@ public class DynamoDbRepository extends AbstractDynamoDbRepository {
         try {
             QueryRequest queryRequest = queryByTagRequest(tag);
             QueryResponse queryResponse = dynamoDB.query(queryRequest);
-            List<PostMeta> postMetas = queryResponse.items().stream()
+            return queryResponse.items().stream()
                     .map(DynamoDbPostMeta::from)
                     .map(fromDynamoDbMapper::toPostMeta)
                     .collect(Collectors.toList());
-            return postMetas;
         } catch (Exception e) {
             handleCommonErrors(e);
             throw new RuntimeException("dynamodb_exception");
