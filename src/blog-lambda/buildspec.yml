@@ -20,7 +20,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Starting local resources...
-      - docker run --publish 8000:8000 amazon/dynamodb-local:1.11.477 -jar DynamoDBLocal.jar -inMemory -sharedDb
+      - docker run -d --publish 8000:8000 amazon/dynamodb-local:1.11.477 -jar DynamoDBLocal.jar -inMemory -sharedDb
       - export DYNAMODB=http://$(hostname -I | cut -d' ' -f1):8000
       - echo DYNAMODB=$DYNAMODB
       - cd $REPO
