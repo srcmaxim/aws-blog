@@ -180,11 +180,15 @@ abstract class AbstractLambdaHandlerTest {
         String body = out.getBody();
         assertThat(body).isNotNull();
         assertThatJson(body)
-                .isEqualTo(toJson(Map.of(
-                        "buildNumber", "BUILD_NUMBER",
-                        "sourceVersion", "SOURCE_VERSION",
-                        "tableName", "Blog"
-                )));
+                .inPath("buildNumber")
+                .isPresent();
+        assertThatJson(body)
+                .inPath("sourceVersion")
+                .isPresent();
+        assertThatJson(body)
+                .inPath("tableName")
+                .isString()
+                .isEqualTo("Blog");
         assertThat(out.getStatusCode()).isEqualTo(200);
     }
 
