@@ -1,0 +1,350 @@
+{
+  "ModelName": "Blog Data Model",
+  "ModelMetadata": {
+    "Author": "Maksym Koval",
+    "DateCreated": "Aug 20, 2020, 08:38 AM",
+    "DateLastModified": "Nov 01, 2020, 12:47 PM",
+    "Description": "",
+    "Version": "1.0"
+  },
+  "DataModel": [
+    {
+      "TableName": "Blog",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "PK",
+          "AttributeType": "S"
+        },
+        "SortKey": {
+          "AttributeName": "SK",
+          "AttributeType": "S"
+        }
+      },
+      "NonKeyAttributes": [
+        {
+          "AttributeName": "content",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "readMinutes",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "publishDate",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "GSI1PK",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "title",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "GSI1SK",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "message",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "userEmail",
+          "AttributeType": "S"
+        }
+      ],
+      "TableFacets": [
+        {
+          "FacetName": "Post",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "PK",
+            "SortKeyAlias": "SK"
+          },
+          "TableData": [
+            {
+              "PK": {
+                "S": "POST#post-title"
+              },
+              "SK": {
+                "S": "POST"
+              },
+              "content": {
+                "S": "https://{bucket}/{post-title}"
+              },
+              "readMinutes": {
+                "N": "3"
+              },
+              "publishDate": {
+                "S": "2020-10-20"
+              },
+              "title": {
+                "S": "Post title"
+              }
+            },
+            {
+              "PK": {
+                "S": "POST#marvelous-post"
+              },
+              "SK": {
+                "S": "POST"
+              },
+              "content": {
+                "S": "https://{bucket}/{marvelous-post}"
+              },
+              "readMinutes": {
+                "N": "5"
+              },
+              "publishDate": {
+                "S": "2020-10-21"
+              },
+              "title": {
+                "S": "Marvelous post"
+              }
+            },
+            {
+              "PK": {
+                "S": "POST#build-dynamodb-blog"
+              },
+              "SK": {
+                "S": "POST"
+              },
+              "content": {
+                "S": "https://{bucket}/{build-dynamodb-blog}"
+              },
+              "readMinutes": {
+                "N": "1"
+              },
+              "publishDate": {
+                "S": "2020-08-20"
+              },
+              "title": {
+                "S": "My DynamoDB Title"
+              }
+            },
+            {
+              "PK": {
+                "S": "POST#graalvm-python"
+              },
+              "SK": {
+                "S": "POST"
+              },
+              "content": {
+                "S": "https://{bucket}/{graalvm-python}"
+              },
+              "readMinutes": {
+                "N": "3"
+              },
+              "publishDate": {
+                "S": "2020-08-18"
+              },
+              "title": {
+                "S": "My Qurkus Python Title"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "content",
+            "readMinutes",
+            "publishDate",
+            "title"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        },
+        {
+          "FacetName": "Tag",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "PK",
+            "SortKeyAlias": "SK"
+          },
+          "TableData": [
+            {
+              "PK": {
+                "S": "POST#build-dynamodb-blog"
+              },
+              "SK": {
+                "S": "TAG#0"
+              },
+              "readMinutes": {
+                "N": "1"
+              },
+              "GSI1PK": {
+                "S": "TAG#DynamoDB"
+              },
+              "title": {
+                "S": "My DynamoDB Title"
+              },
+              "GSI1SK": {
+                "S": "PD#2020-08-20"
+              }
+            },
+            {
+              "PK": {
+                "S": "POST#build-dynamodb-blog"
+              },
+              "SK": {
+                "S": "TAG#1"
+              },
+              "readMinutes": {
+                "N": "1"
+              },
+              "GSI1PK": {
+                "S": "TAG#Python"
+              },
+              "title": {
+                "S": "My DynamoDB Title"
+              },
+              "GSI1SK": {
+                "S": "PD#2020-08-20"
+              }
+            },
+            {
+              "PK": {
+                "S": "POST#graalvm-python"
+              },
+              "SK": {
+                "S": "TAG#0"
+              },
+              "readMinutes": {
+                "N": "3"
+              },
+              "GSI1PK": {
+                "S": "TAG#GralaVM"
+              },
+              "title": {
+                "S": "My Qurkus Python Title"
+              },
+              "GSI1SK": {
+                "S": "PD#2020-08-16"
+              }
+            },
+            {
+              "PK": {
+                "S": "POST#graalvm-python"
+              },
+              "SK": {
+                "S": "TAG#1"
+              },
+              "readMinutes": {
+                "N": "3"
+              },
+              "GSI1PK": {
+                "S": "TAG#Python"
+              },
+              "title": {
+                "S": "My Qurkus Python Title"
+              },
+              "GSI1SK": {
+                "S": "PD#2020-08-16"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "readMinutes",
+            "GSI1PK",
+            "title",
+            "GSI1SK"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        },
+        {
+          "FacetName": "Message",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "PK",
+            "SortKeyAlias": "SK"
+          },
+          "TableData": [
+            {
+              "PK": {
+                "S": "POST#build-dynamodb-blog"
+              },
+              "SK": {
+                "S": "MSG#2020-08-21"
+              },
+              "message": {
+                "S": "Cool post!!!"
+              },
+              "userEmail": {
+                "S": "aws-guru@gmail.com"
+              }
+            },
+            {
+              "PK": {
+                "S": "POST#build-dynamodb-blog"
+              },
+              "SK": {
+                "S": "MSG#2020-08-22"
+              },
+              "message": {
+                "S": "Thanks!!!"
+              },
+              "userEmail": {
+                "S": "srcmaxim@gmail.com"
+              }
+            },
+            {
+              "PK": {
+                "S": "POST#graalvm-python"
+              },
+              "SK": {
+                "S": "MSG#2020-09-16"
+              },
+              "message": {
+                "S": "Wow, python running in Java"
+              },
+              "userEmail": {
+                "S": "some-guy@gmail.com"
+              }
+            },
+            {
+              "PK": {
+                "S": "POST#graalvm-python"
+              },
+              "SK": {
+                "S": "MSG#2020-09-20"
+              },
+              "message": {
+                "S": "It's also integrated in Quarkus"
+              },
+              "userEmail": {
+                "S": "srcmaxim@gmail.com"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "message",
+            "userEmail"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "GSI1",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "GSI1PK",
+              "AttributeType": "S"
+            },
+            "SortKey": {
+              "AttributeName": "GSI1SK",
+              "AttributeType": "S"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        }
+      ],
+      "DataAccess": {
+        "MySql": {}
+      }
+    }
+  ]
+}

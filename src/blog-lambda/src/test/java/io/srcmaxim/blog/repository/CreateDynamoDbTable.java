@@ -4,17 +4,7 @@ import io.srcmaxim.blog.config.DynamoDbConfig;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.AttributeDefinition;
-import software.amazon.awssdk.services.dynamodb.model.CreateTableRequest;
-import software.amazon.awssdk.services.dynamodb.model.CreateTableResponse;
-import software.amazon.awssdk.services.dynamodb.model.GlobalSecondaryIndex;
-import software.amazon.awssdk.services.dynamodb.model.KeySchemaElement;
-import software.amazon.awssdk.services.dynamodb.model.KeyType;
-import software.amazon.awssdk.services.dynamodb.model.Projection;
-import software.amazon.awssdk.services.dynamodb.model.ProjectionType;
-import software.amazon.awssdk.services.dynamodb.model.ProvisionedThroughput;
-import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType;
-import software.amazon.awssdk.services.dynamodb.model.TableDescription;
+import software.amazon.awssdk.services.dynamodb.model.*;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -27,6 +17,7 @@ public class CreateDynamoDbTable {
 
     @Inject
     DynamoDbClient dynamoDb;
+
     @Inject
     DynamoDbConfig dynamoDbConfig;
 
@@ -35,16 +26,33 @@ public class CreateDynamoDbTable {
 
     @PostConstruct
     void onStart() {
-        LOGGER.info("Creating DynamoDB Local...");
+        LOGGER.info("Getting DynamoDB resource...");
         LOGGER.info(DynamoDbLocalResource.LOGGER);
-        LOGGER.infov("DynamoDB Local Endpoint URL: [{0}]", dynamoDbEndpointUrl);
-        LOGGER.info("Creating DynamoDB Local Table...");
-        CreateTableResponse table = dynamoDb.createTable(createTableRequest());
-        TableDescription tableDescription = table.tableDescription();
-        LOGGER.infov("Created DynamoDB Local Table: [{0}] at [{1}]",
+        LOGGER.infov("DynamoDB Endpoint URL: [{0}]", dynamoDbEndpointUrl);
+        LOGGER.info("Checking DynamoDB Table...");
+        try {
+            DescribeTableResponse describeTableResponse = dynamoDb.describeTable(describeTableRequest());
+            LOGGER.info("DynamoDB Table exists");
+            describeTable(describeTableResponse.table());
+        } catch (ResourceNotFoundException e) {
+            LOGGER.info("DynamoDB Table does not exist");
+            LOGGER.info("Creating DynamoDB Table...");
+            CreateTableResponse createTableResponse = dynamoDb.createTable(createTableRequest());
+            describeTable(createTableResponse.tableDescription());
+        }
+    }
+
+    private DescribeTableRequest describeTableRequest() {
+        return  DescribeTableRequest.builder()
+                .tableName(dynamoDbConfig.tableName)
+                .build();
+    }
+
+    private void describeTable(TableDescription tableDescription) {
+        LOGGER.infov("DynamoDB Table: [{0}] at [{1}]",
                 tableDescription.tableArn(), tableDescription.creationDateTime());
         tableDescription.globalSecondaryIndexes().forEach(globalSecondaryIndexDescription -> {
-            LOGGER.infov("Created DynamoDB Local GSI Table: [{0}] at [{1}]",
+            LOGGER.infov("DynamoDB Table GSI: [{0}] at [{1}]",
                     tableDescription.tableArn(), tableDescription.creationDateTime());
         });
     }

@@ -25,7 +25,9 @@ class HealthServiceTest {
 
     @Test
     void getHealth_WhenDynamoDbIsUp_ThenReturn200() {
-        DescribeTableRequest describeTableRequest = DescribeTableRequest.builder().tableName(DynamoDb.Blog.TABLE_NAME).build();
+        DescribeTableRequest describeTableRequest = DescribeTableRequest.builder()
+                .tableName(DynamoDb.Blog.TABLE_NAME)
+                .build();
         when(dynamoDB.describeTable(describeTableRequest))
                 .thenReturn(null);
 
@@ -42,7 +44,9 @@ class HealthServiceTest {
 
     @Test
     void getHealth_WhenDynamoDbIsDown_ThenReturn500() {
-        DescribeTableRequest describeTableRequest = DescribeTableRequest.builder().tableName(DynamoDb.Blog.TABLE_NAME).build();
+        DescribeTableRequest describeTableRequest = DescribeTableRequest.builder()
+                .tableName(DynamoDb.Blog.TABLE_NAME).
+                        build();
         when(dynamoDB.describeTable(describeTableRequest))
                 .thenThrow(new RuntimeException());
 

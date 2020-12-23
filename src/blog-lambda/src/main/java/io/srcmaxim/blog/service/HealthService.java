@@ -20,7 +20,7 @@ public class HealthService {
 
     public Map<String, Object> getHealth() {
         try {
-            dynamoDB.describeTable(describeTableRequest(dynamoDbConfig.tableName));
+            dynamoDB.describeTable(describeTableRequest());
             return Map.of(
                     "status", 200,
                     "data", Map.of(
@@ -43,9 +43,9 @@ public class HealthService {
         }
     }
 
-    protected DescribeTableRequest describeTableRequest(String tableName) {
+    protected DescribeTableRequest describeTableRequest() {
         return  DescribeTableRequest.builder()
-                .tableName(tableName)
+                .tableName(dynamoDbConfig.tableName)
                 .build();
     }
 

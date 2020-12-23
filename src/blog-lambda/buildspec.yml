@@ -19,8 +19,14 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo Building the Docker image...
+      - echo Starting local resources...
+      - docker run --publish 8000:8000 amazon/dynamodb-local:1.11.477 -jar DynamoDBLocal.jar -inMemory -sharedDb
+      - export DYNAMODB=http://$(hostname -I | cut -d' ' -f1):8000
+      - echo DYNAMODB=$DYNAMODB
       - cd $REPO
+      - echo Building the App...
+      - mvn clean install -Pnative -Dquarkus.native.container-build=true -Dquarkus.dynamodb.endpoint-override=$DYNAMODB
+      - echo Building the Docker image for Lambda...
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
   post_build:
